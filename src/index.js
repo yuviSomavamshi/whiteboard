@@ -7,6 +7,10 @@ const WBSUBSCRIBE = "WBSUBSCRIBE";
 class Whiteboard extends EventEmitter {
   async init(opts) {
     redis_man.init({
+      config: opts
+    });
+
+    redis_man.init({
       key: WBSUBSCRIBE,
       config: opts,
       oid: WB

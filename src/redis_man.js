@@ -8,6 +8,7 @@ class RedisMan {
   constructor() {
     this.pool = {};
   }
+
   init(props) {
     if (!props) {
       props = {
@@ -38,11 +39,10 @@ class RedisMan {
         resolve(conn.redis);
       } else {
         conn.redis = new RedisStore(conn.config);
-
         conn.redis.setMaxListeners(100);
-
         conn.redis.on("ready", () => {
           conn.status = 1;
+          this.pool[key] = conn;
           OAM.emit("clearAlert", conn.oid);
           return resolve(conn.redis);
         });

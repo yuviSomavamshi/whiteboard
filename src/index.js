@@ -20,35 +20,30 @@ class Whiteboard extends EventEmitter {
     this.opts = opts;
     let connection = await redis_man.getConnection(WBSUBSCRIBE);
     connection.on("message", (channel, data) => {
-      console.log("WB: Channel:", channel, ", message:", data);
       if (typeof data == "string") {
         try {
           data = JSON.parse(data);
         } catch (error) {
-          data = { code: channel, message: data };
+          data = { topic: channel, message: data };
         }
       }
-      this.emit(data.code, data.message);
+      this.emit(data.topic, data.message);
     });
     connection = await redis_man.getConnection(WBPUBLISH);
   }
 
-  async publish(event, message) {
-    let data = { code: event, message: message };
-    let connection = await redis_man.getConnection(WBPUBLISH);
-    connection.publish(event, JSON.stringify(data));
-    console.log("WB: Published message to an event:%s", event);
+  async publish(topic, message) {
+    const connection = await redis_man.getConnection(WBPUBLISH);
+    connection.publish(topic, JSON.stringify({ topic, message }));
   }
 
-  async subscribe(event) {
-    try {
-      let connection = await redis_man.getConnection(WBSUBSCRIBE);
-      connection.subscribe(event, () => {
-        console.log("WB: Subscribed to an event:%s", event);
-      });
-    } catch (e) {
-      console.error("Failed to subscriber to an Event:", event, e);
-    }
+  async subscribe(topic) {
+    const connection = await redis_man.getConnection(WBSUBSCRIBE);
+    connection.subscribe(topic, () => console.log("Subscribed to Topic:%s", topic));
+  }
+  async unsubscribe(topic) {
+    const connection = await redis_man.getConnection(WBSUBSCRIBE);
+    connection.unsubscribe(topic, () => console.log("Unsubscribed to Topic:%s", topic));
   }
 }
 

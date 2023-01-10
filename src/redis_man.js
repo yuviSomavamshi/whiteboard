@@ -1,11 +1,14 @@
 "use strict";
 const RedisStore = require("ioredis");
-let redisPool = {};
 
 const OAM = require("oam-node");
 const DEFAULT_KEY = "default";
-module.exports = {
-  init: (props) => {
+
+class RedisMan {
+  constructor() {
+    this.pool = {};
+  }
+  init(props) {
     if (!props) {
       props = {
         key: DEFAULT_KEY,
@@ -20,21 +23,17 @@ module.exports = {
     if (!props.key) {
       props.key = DEFAULT_KEY;
     }
-    redisPool[props.key] = {
+    this.pool[props.key] = {
       config: props.config,
       oid: props.oid,
       redis: null, // initial value, when no connection is yet attempted.
       status: 0 // status of connection.
     };
-    global.logger.warn("Register redisprop(" + props.key + ") " + JSON.stringify(redisPool[props.key]));
-  },
+  }
 
-  getConnection: (key) => {
-    if (!key) {
-      key = DEFAULT_KEY;
-    }
+  getConnection(key = DEFAULT_KEY) {
     return new Promise((resolve, reject) => {
-      const conn = redisPool[key];
+      const conn = this.pool[key];
       if (conn && conn.redis != null && conn.status == 1) {
         resolve(conn.redis);
       } else {
@@ -57,13 +56,16 @@ module.exports = {
         });
       }
     });
-  },
+  }
 
-  health: () => {
+  health() {
     const report = {};
-    Object.keys(redisPool).forEach((key) => {
-      report[key] = redisPool[key].status == 1 ? "OK" : "KO";
+    Object.keys(this.pool).forEach((key) => {
+      report[key] = this.pool[key].status == 1 ? "OK" : "KO";
     });
     return report;
   }
-};
+}
+
+module.exports = new RedisMan();
+module.exports.RedisStore = RedisStore;

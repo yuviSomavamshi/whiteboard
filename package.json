@@ -7,7 +7,7 @@
     "node": ">=0.10"
   },
   "scripts": {
-    "test": "",
+    "test": "mocha",
     "prettier": "prettier --ignore-path \"./.prettierignore\" --check \"./**/*.{js,jsx,json,html,ts,tsx}\"",
     "prettier:fix": "prettier --ignore-path \"./.prettierignore\" --write \"./**/*.{js,jsx,json,html,ts,tsx}\""
   },
@@ -27,6 +27,8 @@
     "oam-node": "^1.0.0"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "prettier": "^2.8.2"
   }
 }

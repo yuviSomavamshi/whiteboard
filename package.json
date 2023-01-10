@@ -1,15 +1,15 @@
 {
   "name": "whiteboard-pubsub",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Pubsub library using Redis with Alert-SNPM traps",
   "main": "./src/index.js",
   "engines": {
     "node": ">=0.10"
   },
   "scripts": {
-    "test": "istanbul cover --report lcov _mocha && npm run typescript",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "typescript": "tsc --project ./test/type/tsconfig.json"
+    "test": "",
+    "prettier": "prettier --ignore-path \"./.prettierignore\" --check \"./**/*.{js,jsx,json,html,ts,tsx}\"",
+    "prettier:fix": "prettier --ignore-path \"./.prettierignore\" --write \"./**/*.{js,jsx,json,html,ts,tsx}\""
   },
   "repository": {
     "type": "git",
@@ -23,15 +23,10 @@
   },
   "homepage": "https://github.com/yuviSomavamshi/whiteboard#readme",
   "dependencies": {
-    "denque": "^2.1.0",
     "ioredis": "^5.2.4",
     "oam-node": "^1.0.0"
   },
   "devDependencies": {
-    "benchmark": "^2.1.4",
-    "codecov": "^3.8.3",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.5.3",
-    "typescript": "^3.4.1"
+    "prettier": "^2.8.2"
   }
 }
